@@ -23,10 +23,12 @@ export default function App() {
       setResult(null);
       setLogs([]);
 
+      const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
       // open SSE connection for live logs if not already open
       if (!es) {
         try {
-          const source = new EventSource('http://localhost:3000/events');
+          const source = new EventSource(`${apiBase}/events`);
           source.onmessage = (e) => {
             try {
               const payload = JSON.parse(e.data);
@@ -45,7 +47,7 @@ export default function App() {
         }
       }
 
-      const res = await axios.post("http://localhost:3000/analyze", { url, geminiKey });
+      const res = await axios.post(`${apiBase}/analyze`, { url, geminiKey });
 
       setResult(res.data);
     } catch (err) {
