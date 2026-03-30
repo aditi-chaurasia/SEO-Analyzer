@@ -23,13 +23,10 @@ export default function App() {
       setResult(null);
       setLogs([]);
 
-      const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-
       // open SSE connection for live logs if not already open
       if (!es) {
         try {
-          const source = new EventSource(`${apiBase}/events`);
-          source.onmessage = (e) => {
+             const source = new EventSource('https://seo-analyzer-6.onrender.com/events');          source.onmessage = (e) => {
             try {
               const payload = JSON.parse(e.data);
               setLogs((l) => [...l, payload.message]);
@@ -47,7 +44,7 @@ export default function App() {
         }
       }
 
-      const res = await axios.post(`${apiBase}/analyze`, { url, geminiKey });
+      const res = await axios.post("https://seo-analyzer-6.onrender.com/analyze", { url, geminiKey });
 
       setResult(res.data);
     } catch (err) {
