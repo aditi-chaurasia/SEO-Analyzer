@@ -10,15 +10,23 @@ import crawlWebsite from "./utils/crawler.js";
 import generateALTTextWithLangGraph from "./utils/altGenerator.js";
 
 const app = express();
-app.use(cors({
+
+const corsOptions = {
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
-}));
+};
 
-app.options("*", cors());
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
 app.use(express.json());
-
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 app.post("/analyze", async (req, res) => {
   const { url, geminiKey } = req.body;
 
