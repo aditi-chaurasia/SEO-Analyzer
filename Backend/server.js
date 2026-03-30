@@ -10,7 +10,13 @@ import crawlWebsite from "./utils/crawler.js";
 import generateALTTextWithLangGraph from "./utils/altGenerator.js";
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.options("*", cors());
 app.use(express.json());
 
 app.post("/analyze", async (req, res) => {
@@ -77,6 +83,8 @@ app.post("/analyze", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('SEO Analyzer Server running on http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`SEO Analyzer Server running on port ${PORT}`);
 });
